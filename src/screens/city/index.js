@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, Dimensions, ToastAndroid} from 'react-native';
+import {FlatList, ToastAndroid} from 'react-native';
 // Primitives
 import {Box, Text, Touchable} from 'primitives';
 // Components
@@ -37,7 +37,7 @@ class ForecastScreen extends Component {
     const {locations, activeLocation} = this.props.forecastStore;
     const {theme} = this.props;
     return (
-      <Box flex={1}>
+      <Box flex={1} bg={theme.colors.bg}>
         <PageHeader />
         <Box mx={3} flex={1} pt={3} pb={3} justifyContent="center">
           <FlatList

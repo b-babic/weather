@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, ToastAndroid} from 'react-native';
+import {FlatList, ToastAndroid, ActivityIndicator} from 'react-native';
 // Primitives
 import {Box, Text, Touchable} from 'primitives';
 // Components
@@ -20,7 +20,12 @@ class CityAddScreen extends Component {
   constructor(props) {
     super(props);
     // Local state
-    this.state = {textSearch: '', search: {hits: []}};
+    this.state = {
+      textSearch: '',
+      search: {hits: []},
+      isLoading: false,
+      error: '',
+    };
     // Bind methods and initialize search with algolia
     this._searchResults = this._searchResults.bind(this);
     this.places = algoliasearch.initPlaces(keys.algoliaAppId, keys.algoliaKey);
@@ -35,12 +40,16 @@ class CityAddScreen extends Component {
 
     // Add query item to options
     finalOptions.query = term;
-
+    this.setState({isLoading: true});
     this.places
       .search(finalOptions)
       .then(res => {
         console.warn('hits:: ', res.hits);
-        this.setState({search: {hits: res.hits}, textSearch: term});
+        this.setState({
+          search: {hits: res.hits},
+          textSearch: term,
+          isLoading: false,
+        });
       })
       .catch(err => {
         this.onSearchError(err);
@@ -48,6 +57,7 @@ class CityAddScreen extends Component {
   };
 
   async onSearchError(err) {
+    this.setState({error: err});
     if (this.props.onSearchError) {
       await this.props.onSearchError(err);
     }
@@ -82,10 +92,13 @@ class CityAddScreen extends Component {
     const {theme} = this.props;
     const {
       search: {hits},
+      isLoading,
+      error,
     } = this.state;
-    const haveData = hits && hits.length > 0;
+    const haveData = hits && hits.length > 0 && !isLoading;
+
     return (
-      <Box flex={1}>
+      <Box flex={1} bg={theme.colors.bg}>
         <PageHeader />
         <Box mx={3} flex={1} pt={3} pb={3}>
           <SearchInput
@@ -166,10 +179,24 @@ class CityAddScreen extends Component {
             />
           )}
 
-          {!haveData && (
+          {isLoading && (
+            <Box flex={1} justifyContent="center" alignItems="center">
+              <ActivityIndicator size="large" color={theme.colors.activeIcon} />
+            </Box>
+          )}
+
+          {!haveData && !isLoading && (
             <Box flex={1} justifyContent="center" alignItems="center">
               <Text fontSize={4} color={theme.colors.text}>
                 No data yet. Please search something.
+              </Text>
+            </Box>
+          )}
+
+          {error.length > 0 && (
+            <Box flex={1} justifyContent="center" alignItems="center">
+              <Text fontSize={4} color={theme.colors.text}>
+                Oops. Seems to be an error with algolia.
               </Text>
             </Box>
           )}

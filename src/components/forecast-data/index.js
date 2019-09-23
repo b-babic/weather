@@ -1,4 +1,6 @@
 import React from 'react';
+import {ActivityIndicator} from 'react-native';
+// primitives
 import {Text, Box} from 'primitives';
 // Hooks
 import {useTheme} from 'hooks';
@@ -18,6 +20,22 @@ function ForecastData({
   tempMax,
 }) {
   const theme = useTheme();
+  // Pretty much whenever name is not present, other parts arent too;
+  const noData = !name || name.length === 0;
+  if (noData) {
+    return (
+      <Box
+        bg={theme.colors.bg}
+        flex={1}
+        alignItems="center"
+        justifyContent="center"
+        style={{borderTopLeftRadius: 20, borderTopRightRadius: 20}}
+        px={4}
+        py={4}>
+        <ActivityIndicator size="large" color={theme.colors.activeIcon} />
+      </Box>
+    );
+  }
   return (
     <Box
       bg={theme.colors.bg}
