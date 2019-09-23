@@ -6,17 +6,7 @@ import Geolocation from '@react-native-community/geolocation';
 import {uuid} from 'utils';
 
 export default class ForecastStore {
-  constructor() {
-    this.getPersistedActiveLocation();
-    this.getPersistedLocations();
-    AsyncStorage.getItem('@WeatherApp:activeLocation').then(item => {
-      this.activeLocation = item;
-    });
-    console.warn('CONSTRUCTOR:::', this.activeLocation);
-  }
   @observable isColdBoot = true;
-  @observable value = 'cat';
-  @observable persistedValue = 'motor';
 
   @observable locations = [
     {
@@ -70,14 +60,6 @@ export default class ForecastStore {
 
   @observable error = '';
 
-  @action setNewValue() {
-    this.value = 'dog';
-  }
-
-  @action setIsColdBoot() {
-    this.isColdBoot = true;
-  }
-
   @action setNewActiveLocationByCityId(toBecomeActiveId, oldActiveId) {
     // Find old one and remove it
     const oldOne = this.locations.filter(item => item.id === oldActiveId)[0];
@@ -128,19 +110,15 @@ export default class ForecastStore {
     this.setActiveLocationAndPersist();
   }
 
-  async setActiveLocationAndPersist() {
-    try {
-      AsyncStorage.setItem(
-        '@WeatherApp:activeLocation',
-        JSON.stringify(this.activeLocation),
-      );
-      AsyncStorage.setItem(
-        '@WeatherApp:locations',
-        JSON.stringify(this.locations),
-      );
-    } catch (error) {
-      console.log(error);
-    }
+  setActiveLocationAndPersist() {
+    AsyncStorage.setItem(
+      '@WeatherApp:activeLocation',
+      JSON.stringify(this.activeLocation),
+    );
+    AsyncStorage.setItem(
+      '@WeatherApp:locations',
+      JSON.stringify(this.locations),
+    );
   }
 
   async getPersistedActiveLocation() {
@@ -161,27 +139,12 @@ export default class ForecastStore {
     }
   }
 
-  async setNewValueAndPersist() {
-    this.persistedValue = this.persistedValue === 'bike' ? 'motor' : 'bike';
-    try {
-      await AsyncStorage.setItem(
-        '@WeatherApp:persistedValue',
-        JSON.stringify(this.persistedValue),
-      );
-    } catch (error) {
-      console.log(error);
-      this.error = error;
-      this.isLoading = false;
-    }
+  @action setActiveLocation(location) {
+    this.activeLocation = location;
   }
 
-  async getPersistedValue() {
-    const persistedValue = await AsyncStorage.getItem(
-      '@WeatherApp:persistedValue',
-    );
-    if (persistedValue) {
-      this.persistedValue = persistedValue;
-    }
+  @action setLocations(locations) {
+    this.locations = locations;
   }
 
   @action fetchWeatherForCurrentActiveLocation() {

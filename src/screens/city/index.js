@@ -13,10 +13,19 @@ const {width, height} = Dimensions.get('screen');
 import FeatherIcon from 'react-native-vector-icons/Feather';
 // Utils
 import isEqual from 'lodash.isequal';
+import AsyncStorage from '@react-native-community/async-storage';
 
 @inject('forecastStore')
 @observer
 class ForecastScreen extends Component {
+  async componentDidMount() {
+    const value = await AsyncStorage.getItem('@WeatherApp:locations');
+    if (value) {
+      const parsedValue = JSON.parse(value);
+      this.props.forecastStore.setLocations(parsedValue);
+    }
+  }
+
   _renderHeader = () => {
     const {theme} = this.props;
     return (
