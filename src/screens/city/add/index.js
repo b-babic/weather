@@ -99,7 +99,7 @@ class CityAddScreen extends Component {
 
     return (
       <Box flex={1} bg={theme.colors.bg}>
-        <PageHeader />
+        <PageHeader title="Add new city" />
         <Box mx={3} flex={1} pt={3} pb={3}>
           <SearchInput
             placeholder="Type a message to search"

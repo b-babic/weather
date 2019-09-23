@@ -38,7 +38,7 @@ class ForecastScreen extends Component {
     const {theme} = this.props;
     return (
       <Box flex={1} bg={theme.colors.bg}>
-        <PageHeader />
+        <PageHeader title="Forecast locations" />
         <Box mx={3} flex={1} pt={3} pb={3} justifyContent="center">
           <FlatList
             data={locations}

@@ -31,7 +31,7 @@ class SettingsScreen extends Component {
     const {themeVariant} = this.props.uiStore;
     return (
       <Box flex={1} bg={theme.colors.bg}>
-        <PageHeader />
+        <PageHeader title="Settings" />
         <ScrollView>
           <Box flex={1} flexDirection="column" mx="3" mb="5">
             <Box mb="3">
