@@ -95,6 +95,7 @@ class CityAddScreen extends Component {
   }
 
   _handleAddingNewCity = (name, latitude, longitude, id) => {
+    debugger;
     const {forecastStore} = this.props;
     const cityObjectToAppend = {
       name: name,
@@ -103,7 +104,7 @@ class CityAddScreen extends Component {
       active: false,
       id: id,
     };
-    if ((containsObject(cityObjectToAppend), forecastStore.locations)) {
+    if (containsObject(cityObjectToAppend, forecastStore.locations)) {
       console.warn('City already exists::: ');
       return;
     }
@@ -113,6 +114,18 @@ class CityAddScreen extends Component {
       `${name} successfully added to the list!`,
       ToastAndroid.SHORT,
     );
+  };
+
+  _returnListItemName = item => {
+    if (item.locale_names instanceof Array) {
+      return item.locale_names[0] || item.locale_names.default[0];
+    } else if (item.city !== undefined && item.city.length > 0) {
+      return item.city.default;
+    } else if (item.administrative !== undefined) {
+      return item.administrative[0];
+    } else if (typeof item.country === 'string') {
+      return item.country || item.country.default;
+    }
   };
 
   render() {
@@ -136,46 +149,47 @@ class CityAddScreen extends Component {
               data={hits}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{marginRight: 2}}
-              renderItem={({item}) => (
-                <Box
-                  py={2}
-                  px={2}
-                  mr={2}
-                  mb={4}
-                  border={0}
-                  borderRadius={0}
-                  bg={theme.colors.white}>
-                  <Touchable
-                    onPress={() =>
-                      this._handleAddingNewCity(
-                        item.country.en,
-                        item._geoloc.lat,
-                        item._geoloc.lng,
-                        item.objectID,
-                      )
-                    }>
-                    <Box alignItems="center" flexDirection="row">
-                      <Box mr={4} flex={1}>
-                        <FeatherIcon
-                          name="home"
-                          size={32}
-                          color={theme.colors.text}
-                        />
-                      </Box>
-                      <Box
-                        flex={4}
-                        justifyContent="space-between"
-                        alignItems="center">
-                        <Box>
-                          <Text>
-                            {item.locale_names instanceof Array
-                              ? item.locale_names[0]
-                              : item.locale_names.default[0]}
-                          </Text>
+              renderItem={({item}) => {
+                const itemName = this._returnListItemName(item);
+                if (!itemName) return;
+                console.warn('passing to press', itemName);
+                return (
+                  <Box
+                    py={2}
+                    px={2}
+                    mr={2}
+                    mb={4}
+                    border={0}
+                    borderRadius={0}
+                    bg={theme.colors.white}>
+                    <Touchable
+                      onPress={() =>
+                        this._handleAddingNewCity(
+                          itemName,
+                          item._geoloc.lat,
+                          item._geoloc.lng,
+                          item.objectID,
+                        )
+                      }>
+                      <Box alignItems="center" flexDirection="row">
+                        <Box mr={4} flex={1}>
+                          <FeatherIcon
+                            name="home"
+                            size={32}
+                            color={theme.colors.text}
+                          />
                         </Box>
-                        <Box alignItems="center" flex-direction="row">
+                        <Box
+                          flex={4}
+                          justifyContent="space-between"
+                          alignItems="center">
                           <Box>
-                            <Text>
+                            <Text textColor={theme.colors.text}>
+                              {item.locale_names instanceof Array
+                                ? item.locale_names[0]
+                                : item.locale_names.default[0]}
+                            </Text>
+                            <Text textColor={theme.colors.inactiveText}>
                               {'  -  ' +
                                 (item.city !== undefined
                                   ? item.city[0] + ', '
@@ -190,10 +204,10 @@ class CityAddScreen extends Component {
                           </Box>
                         </Box>
                       </Box>
-                    </Box>
-                  </Touchable>
-                </Box>
-              )}
+                    </Touchable>
+                  </Box>
+                );
+              }}
               keyExtractor={item => item.id}
             />
           )}
