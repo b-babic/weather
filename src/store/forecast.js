@@ -3,7 +3,7 @@ import {observable, action, computed} from 'mobx';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 // Utils
-import {uuid} from 'utils';
+import {uuid, keys} from 'utils';
 
 export default class ForecastStore {
   @observable isColdBoot = true;
@@ -149,9 +149,9 @@ export default class ForecastStore {
 
   @action fetchWeatherForCurrentActiveLocation() {
     const {latitude, longitude} = this.activeLocation;
-    const API_KEY = '5817b972e7e6c3386e8c3e0d4d937f9a';
+
     return fetch(
-      `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${API_KEY}&units=metric`,
+      `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${keys.openWeatherKey}&units=metric`,
     )
       .then(resp => resp.json())
       .then(json => {
@@ -160,6 +160,14 @@ export default class ForecastStore {
           weahterCondition: json.weather[0].main,
         };
       });
+  }
+
+  @action appendNewCityToTheLocations(cityObject) {
+    this.locations.push(cityObject);
+    AsyncStorage.setItem(
+      '@WeatherApp:locations',
+      JSON.stringify(this.locations),
+    );
   }
 
   @computed get isActiveLocationEmpty() {
