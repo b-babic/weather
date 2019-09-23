@@ -6,6 +6,14 @@ import Geolocation from '@react-native-community/geolocation';
 import {uuid} from 'utils';
 
 export default class ForecastStore {
+  constructor() {
+    this.getPersistedActiveLocation();
+    this.getPersistedLocations();
+    AsyncStorage.getItem('@WeatherApp:activeLocation').then(item => {
+      this.activeLocation = item;
+    });
+    console.warn('CONSTRUCTOR:::', this.activeLocation);
+  }
   @observable isColdBoot = true;
   @observable value = 'cat';
   @observable persistedValue = 'motor';
@@ -66,11 +74,34 @@ export default class ForecastStore {
     this.value = 'dog';
   }
 
+  @action setIsColdBoot() {
+    this.isColdBoot = true;
+  }
+
+  @action setNewActiveLocationByCityId(toBecomeActiveId, oldActiveId) {
+    // Find old one and remove it
+    const oldOne = this.locations.filter(item => item.id === oldActiveId)[0];
+    if (oldOne) {
+      oldOne.active = false;
+    }
+    // Handle setting new one
+    const newOne = this.locations.filter(
+      item => item.id === toBecomeActiveId,
+    )[0];
+    if (newOne) {
+      this.fetchWeatherForCurrentActiveLocation();
+      this.activeLocation = newOne;
+      newOne.active = true;
+    }
+    this.setActiveLocationAndPersist();
+    console.warn('new one selected:::', this.activeLocation, this.locations);
+  }
+
   @action async setCurrentLocation() {
     try {
       await Geolocation.getCurrentPosition(
         position => {
-          this.setActiveLocationAndPersist(position.coords);
+          this.setInitialLocationAndPersist(position.coords);
         },
         error => (this.error = error),
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
@@ -80,7 +111,7 @@ export default class ForecastStore {
     }
   }
 
-  setActiveLocationAndPersist(coords) {
+  setInitialLocationAndPersist(coords) {
     this.activeLocation = {
       name: 'My current location',
       longitude: coords.longitude,
@@ -91,9 +122,13 @@ export default class ForecastStore {
     // If cold boot, add this item to the locations
     if (this.isColdBoot) {
       this.locations.push(this.activeLocation);
-      this.coldBoot = false;
+      this.isColdBoot = false;
     }
 
+    this.setActiveLocationAndPersist();
+  }
+
+  async setActiveLocationAndPersist() {
     try {
       AsyncStorage.setItem(
         '@WeatherApp:activeLocation',
@@ -149,7 +184,7 @@ export default class ForecastStore {
     }
   }
 
-  @action fethWeatherForCurrentActiveLocation() {
+  @action fetchWeatherForCurrentActiveLocation() {
     const {latitude, longitude} = this.activeLocation;
     const API_KEY = '5817b972e7e6c3386e8c3e0d4d937f9a';
     return fetch(

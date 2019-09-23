@@ -3,6 +3,11 @@ import {observable, action, computed} from 'mobx';
 export default class UiStore {
   @observable isLoading = false;
   @observable error: '';
+  @observable themeVariant = 'light';
+
+  @action toggleThemeVariant() {
+    this.themeVariant = this.themeVariant === 'light' ? 'dark' : 'light';
+  }
 
   @action toggleLoading() {
     this.isLoading = !this.isLoading;

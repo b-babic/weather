@@ -1,10 +1,16 @@
 import React from 'react';
-import {View, Text} from 'react-native';
 import {Scene, Router, Stack, Tab} from 'react-native-router-flux';
+// Store
+import {inject, observer} from 'mobx-react';
+// Screens
 import Home from './home';
 import Cities from './city';
 import AddCity from './city/add';
 import Settings from './settings';
+
+// ThemeProvider
+import theme from 'theme/theme';
+import {ThemeProvider} from 'theme/context';
 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -26,45 +32,57 @@ const TabIcon = ({selected, title}) => {
   return <MaterialIcon color={tintColor} size={24} name={_handleIconName()} />;
 };
 
-export default class Screens extends React.Component {
+@inject('uiStore')
+@observer
+class Screens extends React.Component {
   render() {
+    const {themeVariant} = this.props.uiStore;
+    const themeValue = theme[themeVariant] || theme['light'];
+    console.warn('theme::: ', themeValue);
     return (
       <>
-        <Router>
-          <Scene key="root" hideNavBar>
-            {/* Tab Container */}
-            <Scene key="tabBar" tabBarPosition="bottom" tabs={true}>
-              <Scene
-                key="home"
-                component={Home}
-                title="Home"
-                icon={TabIcon}
-                hideNavBar={true}
-              />
-              <Scene
-                key="cities"
-                component={Cities}
-                title="Forecast"
-                icon={TabIcon}
-              />
-              <Scene
-                key="addCity"
-                component={AddCity}
-                title="Add city"
-                icon={TabIcon}
-                showLabel={false}
-              />
-              <Scene
-                key="settings"
-                component={Settings}
-                title="Settings"
-                icon={TabIcon}
-              />
+        <ThemeProvider theme={themeValue}>
+          <Router>
+            <Scene key="root" hideNavBar>
+              {/* Tab Container */}
+              <Scene key="tabBar" tabBarPosition="bottom" tabs={true}>
+                <Scene
+                  key="home"
+                  component={Home}
+                  title="Home"
+                  icon={TabIcon}
+                  hideNavBar={true}
+                />
+                <Scene
+                  key="cities"
+                  component={Cities}
+                  title="Forecast"
+                  icon={TabIcon}
+                  hideNavBar={true}
+                />
+                <Scene
+                  key="addCity"
+                  component={AddCity}
+                  title="Add city"
+                  icon={TabIcon}
+                  showLabel={false}
+                  hideNavBar={true}
+                />
+                <Scene
+                  key="settings"
+                  component={Settings}
+                  title="Settings"
+                  icon={TabIcon}
+                  hideNavBar={true}
+                />
+              </Scene>
+              {/* <Screne key="error" component={Error} hideNavBar/> */}
             </Scene>
-            {/* <Screne key="error" component={Error} hideNavBar/> */}
-          </Scene>
-        </Router>
+          </Router>
+        </ThemeProvider>
       </>
     );
   }
 }
+
+export default Screens;

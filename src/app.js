@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {Provider} from 'mobx-react';
+// Screens
 import Screens from 'screens';
+// Store
 import store from 'store';
 
-export default class AppContainer extends Component {
+class AppContainer extends Component {
   render() {
     return (
       <Provider {...store}>
@@ -12,3 +14,5 @@ export default class AppContainer extends Component {
     );
   }
 }
+
+export default AppContainer;

@@ -10,13 +10,18 @@ class HomeScreen extends Component {
   async componentDidMount() {
     // Handle retrieveing data
     const {isActiveLocationEmpty, error} = this.props.forecastStore;
-    this.props.uiStore.setLoading();
-    this.props.forecastStore.getPersistedActiveLocation();
     try {
       await this.props.forecastStore.getPersistedActiveLocation();
-    } catch (e) {
-      console.warn('error while running store actions');
+    } catch (err) {
+      // hehe
     }
+    // const location = await this.props.forecastStore.getPersistedActiveLocation();
+    // console.warn('CHECK NOW::: ', location);
+    // try {
+    //   await this.props.forecastStore.getPersistedActiveLocation();
+    // } catch (e) {
+    //   console.warn('error while running store actions');
+    // }
     // try {
     //   await this.props.forecastStore.getPersistedActiveLocation();
     // } catch (e) {
@@ -30,12 +35,9 @@ class HomeScreen extends Component {
     // Could be cold boot or gps deny grant ?
     // Either way try to get gps coordinates and set to active
     if (isActiveLocationEmpty) {
-      this.props.uiStore.setLoading();
       try {
         await this.props.forecastStore.setCurrentLocation();
-        // this.props.uiStore.setLoadingFalse();
       } catch (e) {
-        this.props.uiStore.setLoadingFalse();
         this.props.uiStore.setError(
           'Error granting gps for current location. Please try again!',
         );
@@ -46,8 +48,9 @@ class HomeScreen extends Component {
     // If there is location in fact
     // Just call forecast and fetch data
     // this.props.forecastStore.getForecastData()
+    this.props.uiStore.setLoading();
     this.props.forecastStore
-      .fethWeatherForCurrentActiveLocation()
+      .fetchWeatherForCurrentActiveLocation()
       .then(resp => {
         this.props.uiStore.setLoadingFalse();
       })
