@@ -2,7 +2,7 @@ import React from 'react';
 // Primitives
 import {Box} from 'primitives';
 // Icons
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 // Theme
 import {useTheme} from 'hooks';
 
@@ -14,7 +14,7 @@ const CityStatus = ({isActive}) => {
 
   return (
     <Box>
-      <MaterialIcon name="check-circle" size={16} color={iconColor} />
+      <MaterialCommunityIcon name="marker-check" size={16} color={iconColor} />
     </Box>
   );
 };

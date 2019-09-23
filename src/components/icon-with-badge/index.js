@@ -1,25 +1,41 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {View, StyleSheet} from 'react-native';
 // State
-import {useApp} from 'store';
+import {inject, observer} from 'mobx-react';
+// Theme
+import {withTheme} from 'hocs';
 // Icons
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const IconWithBadge = ({MainIcon}) => {
-  const {state} = useApp();
-  const {thereIsNewData} = state;
-  const shouldHide = !thereIsNewData;
-  return (
-    <View>
-      {MainIcon}
-      {!shouldHide && (
-        <View style={[styles.IconBadge, {backgroundColor: 'red'}]}>
-          <MaterialIcon name="spa" size={12} color="red" />
-        </View>
-      )}
-    </View>
-  );
-};
+@inject('uiStore')
+@observer
+class IconWithBadge extends PureComponent {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const theme = this.props;
+    const {MainIcon} = this.props;
+    const {hasNewData} = this.props.uiStore;
+    return (
+      <View>
+        {MainIcon}
+        {hasNewData && (
+          <View
+            style={
+              (styles.IconBadge, {backgroundColor: theme.colors.red['400']})
+            }>
+            <MaterialCommunityIcon
+              name="bell-ring"
+              size={12}
+              color={theme.colors.red['600']}
+            />
+          </View>
+        )}
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   IconBadge: {
@@ -34,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default IconWithBadge;
+export default withTheme(IconWithBadge);

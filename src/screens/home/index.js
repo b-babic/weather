@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, ToastAndroid} from 'react-native';
+import {ToastAndroid} from 'react-native';
+// Components
+import {ForecastData} from 'components';
+// Primitives
+import {Box} from 'primitives';
 // Store
 import {inject, observer} from 'mobx-react';
-import {toJS} from 'mobx';
+// Storage
 import AsyncStorage from '@react-native-community/async-storage';
 
 @inject('forecastStore', 'uiStore')
@@ -51,41 +55,22 @@ class HomeScreen extends Component {
   render() {
     const {
       activeLocation: {name, longitude, latitude},
-      forecast,
+      forecast: {temperature, weatherCondition},
       error,
     } = this.props.forecastStore;
     const {isLoading} = this.props.uiStore;
     return (
-      <View>
-        {isLoading && error.length === 0 && (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text>Loading</Text>
-          </View>
-        )}
-
-        {error.length > 0 && (
-          <View>
-            <Text>ERror : {error}</Text>
-          </View>
-        )}
-
-        {!isLoading && (
-          <>
-            <View style={{marginBottom: 20}}>
-              <Text>Fetching forecast for: {name}</Text>
-              <Text>{longitude}</Text>
-              <Text>{latitude}</Text>
-              <Text>{forecast.temperature}</Text>
-              <Text>{forecast.weatherCondition}</Text>
-            </View>
-          </>
-        )}
-      </View>
+      <Box flex={1}>
+        <ForecastData
+          isLoading={isLoading}
+          error={error}
+          name={name}
+          longitude={longitude}
+          latitude={latitude}
+          temperature={temperature}
+          weatherCondition={weatherCondition}
+        />
+      </Box>
     );
   }
 }

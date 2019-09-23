@@ -1,36 +1,17 @@
 import React from 'react';
-import {Scene, Router, Stack, Tab} from 'react-native-router-flux';
-// Store
-import {inject, observer} from 'mobx-react';
+import {Scene, Router} from 'react-native-router-flux';
 // Screens
 import Home from './home';
 import Cities from './city';
 import AddCity from './city/add';
 import Settings from './settings';
-
+// Store
+import {observer, inject} from 'mobx-react';
+// Components
+import {TabIcon} from 'components';
 // ThemeProvider
 import theme from 'theme/theme';
 import {ThemeProvider} from 'theme/context';
-
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-
-const TabIcon = ({selected, title}) => {
-  //TODO: replace with theme colors later
-  const tintColor = selected ? '#999999' : '#333';
-  function _handleIconName() {
-    switch (title) {
-      case 'Home':
-        return 'wb-sunny';
-      case 'Forecast':
-        return 'map';
-      case 'Settings':
-        return 'perm-device-information';
-      default:
-        return null;
-    }
-  }
-  return <MaterialIcon color={tintColor} size={24} name={_handleIconName()} />;
-};
 
 @inject('uiStore')
 @observer
@@ -38,7 +19,6 @@ class Screens extends React.Component {
   render() {
     const {themeVariant} = this.props.uiStore;
     const themeValue = theme[themeVariant] || theme['light'];
-    console.warn('theme::: ', themeValue);
     return (
       <>
         <ThemeProvider theme={themeValue}>
@@ -50,21 +30,21 @@ class Screens extends React.Component {
                   key="home"
                   component={Home}
                   title="Home"
-                  icon={TabIcon}
+                  icon={() => <TabIcon icon="weather-partly-cloudy" />}
                   hideNavBar={true}
                 />
                 <Scene
                   key="cities"
                   component={Cities}
                   title="Forecast"
-                  icon={TabIcon}
+                  icon={() => <TabIcon icon="playlist-plus" />}
                   hideNavBar={true}
                 />
                 <Scene
                   key="addCity"
                   component={AddCity}
                   title="Add city"
-                  icon={TabIcon}
+                  icon={() => <TabIcon icon="map-marker-plus" />}
                   showLabel={false}
                   hideNavBar={true}
                 />
@@ -72,7 +52,7 @@ class Screens extends React.Component {
                   key="settings"
                   component={Settings}
                   title="Settings"
-                  icon={TabIcon}
+                  icon={() => <TabIcon icon="cellphone-settings-variant" />}
                   hideNavBar={true}
                 />
               </Scene>

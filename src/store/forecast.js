@@ -157,7 +157,7 @@ export default class ForecastStore {
       .then(json => {
         this.forecast = {
           temperature: json.main.temp,
-          weahterCondition: json.weather[0].main,
+          weatherCondition: json.weather[0].main,
         };
       });
   }

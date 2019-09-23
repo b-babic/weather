@@ -1,19 +1,18 @@
 import React, {Component} from 'react';
-import {FlatList, Dimensions, ToastAndroid} from 'react-native';
+import {FlatList, ToastAndroid} from 'react-native';
 // Primitives
 import {Box, Text, Touchable} from 'primitives';
 // Components
-import Search from 'components/search';
+import {SearchInput} from 'components';
+import {PageHeader} from 'components';
 // State hook and theme
 import {observer, inject} from 'mobx-react';
 import {withTheme} from 'hocs';
-// Dimensions
-const {width, height} = Dimensions.get('screen');
-// Icons
-import FeatherIcon from 'react-native-vector-icons/Feather';
 // Utils
 import algoliasearch from 'algoliasearch/reactnative';
-import {keys, uuid, containsObject} from 'utils';
+import {keys, containsObject} from 'utils';
+// Icons
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 @inject('forecastStore')
 @observer
@@ -27,46 +26,6 @@ class CityAddScreen extends Component {
     this.places = algoliasearch.initPlaces(keys.algoliaAppId, keys.algoliaKey);
     this._searchResults(this.state.textSearch);
   }
-
-  _renderHeader = () => {
-    const {theme} = this.props;
-    return (
-      <Box
-        bg={theme.colors.bg}
-        flexDirection="row"
-        alignItems="center"
-        justifyContent="center"
-        height={height * 0.1}
-        width={width}
-        px="2">
-        <Box flex={1}>
-          <Touchable>
-            <FeatherIcon
-              name="arrow-left"
-              size={theme.fontSizes[4]}
-              color={theme.colors.text}
-            />
-          </Touchable>
-        </Box>
-
-        <Box flex={1} alignItems="center">
-          <Text fontSize={2} color={theme.colors.text}>
-            Filter
-          </Text>
-        </Box>
-        <Box flex={1} alignItems="flex-end">
-          <Touchable disabled activeOpacity={0.2}>
-            <FeatherIcon
-              name="plus"
-              color={theme.colors.text}
-              size={theme.fontSizes[4]}
-            />
-          </Touchable>
-        </Box>
-      </Box>
-    );
-  };
-
   _searchResults = term => {
     var finalOptions = {};
     // If user set options we use them
@@ -127,9 +86,9 @@ class CityAddScreen extends Component {
     const haveData = hits && hits.length > 0;
     return (
       <Box flex={1}>
-        {this._renderHeader()}
+        <PageHeader />
         <Box mx={3} flex={1} pt={3} pb={3}>
-          <Search
+          <SearchInput
             placeholder="Type a message to search"
             onChangeText={term => {
               this._searchResults(term);
@@ -139,7 +98,7 @@ class CityAddScreen extends Component {
             <FlatList
               data={hits}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{marginRight: 2}}
+              contentContainerStyle={{marginRight: theme.space[1]}}
               renderItem={({item}) => {
                 const itemName =
                   item.locale_names instanceof Array
@@ -168,8 +127,8 @@ class CityAddScreen extends Component {
                       }>
                       <Box alignItems="center" flexDirection="row">
                         <Box mr={4} flex={1}>
-                          <FeatherIcon
-                            name="home"
+                          <MaterialCommunityIcon
+                            name="earth"
                             size={32}
                             color={theme.colors.text}
                           />

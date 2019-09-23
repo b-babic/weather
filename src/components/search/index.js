@@ -150,5 +150,3 @@ SearchInput.propTypes = {
   throttle: PropTypes.number,
   value: PropTypes.string,
 };
-
-export {createFilter};
