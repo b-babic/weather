@@ -1,22 +1,51 @@
 import {observable, action, computed} from 'mobx';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class ForecastStore {
-  @observable fabAction: true;
-  @observable sideBarToggled: false;
+  @observable value = 'cat';
+  @observable persistedValue = 'motor';
+  @observable error = '';
+  @observable isLoading = false;
 
-  @computed get isActive() {
-    return this.fabAction;
+  @action setNewValue() {
+    this.value = 'dog';
   }
 
-  @action setFabActive() {
-    this.fabAction = !this.fabAction;
+  async setNewValueAndPersist() {
+    this.isLoading = true;
+    this.persistedValue = 'bike';
+    try {
+      await AsyncStorage.setItem(
+        '@WeatherApp:persistedValue',
+        JSON.stringify(this.persistedValue),
+      );
+      this.isLoading = false;
+    } catch (error) {
+      console.log(error);
+      this.error = error;
+      this.isLoading = false;
+    }
   }
 
-  @computed get isToggled() {
-    return this.sideBarToggled;
+  async getPersistedValue() {
+    const persistedValue = await AsyncStorage.getItem(
+      '@WeatherApp:persistedValue',
+    );
+    if (persistedValue) {
+      this.persistedValue = persistedValue;
+      this.isLoading = false;
+    }
   }
 
-  @action setSideToggle() {
-    this.sideBarToggled = !this.sideBarToggled;
+  @action setError(msg) {
+    this.error = msg;
   }
+
+  //   @computed get isActive() {
+  //     return this.fabAction;
+  //   }
+
+  //   @action setFabActive() {
+  //     this.fabAction = !this.fabAction;
+  //   }
 }
