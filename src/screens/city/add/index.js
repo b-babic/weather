@@ -138,12 +138,12 @@ class CityAddScreen extends Component {
                           justifyContent="space-between"
                           alignItems="center">
                           <Box>
-                            <Text textColor={theme.colors.text}>
+                            <Text color={theme.colors.text}>
                               {item.locale_names instanceof Array
                                 ? item.locale_names[0]
                                 : item.locale_names.default[0]}
                             </Text>
-                            <Text textColor={theme.colors.inactiveText}>
+                            <Text color={theme.colors.inactiveText}>
                               {'  -  ' +
                                 (item.city !== undefined
                                   ? item.city[0] + ', '
@@ -168,7 +168,7 @@ class CityAddScreen extends Component {
 
           {!haveData && (
             <Box flex={1} justifyContent="center" alignItems="center">
-              <Text fontSize={4} textColor={theme.colors.text}>
+              <Text fontSize={4} color={theme.colors.text}>
                 No data yet. Please search something.
               </Text>
             </Box>

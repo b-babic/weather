@@ -158,6 +158,9 @@ export default class ForecastStore {
         this.forecast = {
           temperature: json.main.temp,
           weatherCondition: json.weather[0].main,
+          humidity: json.main.humidity,
+          tempMin: json.main['temp_min'],
+          tempMax: json.main['temp_max'],
         };
       });
   }

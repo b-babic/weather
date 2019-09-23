@@ -41,7 +41,7 @@ const colors = {
   },
 };
 
-const fontSizes = [12, 14, 16, 20, 24, 32];
+const fontSizes = [12, 14, 16, 20, 24, 32, 36, 40, 44, 48];
 const letterSpacings = [0, 1, 2];
 const lineHeights = [12, 16, 32];
 const space = [0, 4, 8, 16, 32, 64];
@@ -61,7 +61,7 @@ const theme = {
       text: colors.gray['800'],
       inactiveText: colors.gray['500'],
       title: colors.gray['900'],
-      subtitle: colors.gray['800'],
+      subtitle: colors.gray['600'],
       border: colors.gray['500'],
       shadow: colors.gray['500'],
       activeIcon: colors.green['500'],

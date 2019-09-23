@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
-import {ToastAndroid} from 'react-native';
+import {ToastAndroid, Dimensions} from 'react-native';
 // Components
-import {ForecastData} from 'components';
+import {ForecastData, ProgressiveImage} from 'components';
 // Primitives
 import {Box} from 'primitives';
 // Store
 import {inject, observer} from 'mobx-react';
 // Storage
 import AsyncStorage from '@react-native-community/async-storage';
+// Dimensions
+const {width, height} = Dimensions.get('screen');
 
 @inject('forecastStore', 'uiStore')
 @observer
@@ -55,12 +57,25 @@ class HomeScreen extends Component {
   render() {
     const {
       activeLocation: {name, longitude, latitude},
-      forecast: {temperature, weatherCondition},
+      forecast: {temperature, weatherCondition, humidity, tempMin, tempMax},
       error,
     } = this.props.forecastStore;
     const {isLoading} = this.props.uiStore;
     return (
       <Box flex={1}>
+        <Box style={{height: height / 3, width: width}}>
+          <ProgressiveImage
+            source={{
+              uri: `https://images.pexels.com/photos/671557/pexels-photo-671557.jpeg?w=${width *
+                2}&buster=${Math.random()}`,
+            }}
+            thumbnailSource={{
+              uri: `https://images.pexels.com/photos/671557/pexels-photo-671557.jpeg?w=50&buster=${Math.random()}`,
+            }}
+            style={{width: width, height: width * 0.7}}
+            resizeMode="cover"
+          />
+        </Box>
         <ForecastData
           isLoading={isLoading}
           error={error}
@@ -69,6 +84,9 @@ class HomeScreen extends Component {
           latitude={latitude}
           temperature={temperature}
           weatherCondition={weatherCondition}
+          humidity={humidity}
+          tempMax={tempMax}
+          tempMin={tempMin}
         />
       </Box>
     );

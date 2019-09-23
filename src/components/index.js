@@ -5,3 +5,4 @@ export {default as SearchInput} from './search';
 export {default as PageHeader} from './header';
 export {default as ForecastData} from './forecast-data';
 export {default as TabIcon} from './tab-icon';
+export {default as ProgressiveImage} from './progressive-image';
