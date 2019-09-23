@@ -71,15 +71,15 @@ export default class ForecastStore {
       item => item.id === toBecomeActiveId,
     )[0];
     if (newOne) {
-      this.fetchWeatherForCurrentActiveLocation();
       this.activeLocation = newOne;
+      this.fetchWeatherForCurrentActiveLocation();
       newOne.active = true;
     }
     this.setActiveLocationAndPersist();
     console.warn('new one selected:::', this.activeLocation, this.locations);
   }
 
-  @action async setCurrentLocation() {
+  @action async setCurrentLocationToActive() {
     try {
       await Geolocation.getCurrentPosition(
         position => {
