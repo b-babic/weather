@@ -95,7 +95,6 @@ class CityAddScreen extends Component {
   }
 
   _handleAddingNewCity = (name, latitude, longitude, id) => {
-    debugger;
     const {forecastStore} = this.props;
     const cityObjectToAppend = {
       name: name,
@@ -104,27 +103,19 @@ class CityAddScreen extends Component {
       active: false,
       id: id,
     };
-    if (containsObject(cityObjectToAppend, forecastStore.locations)) {
-      console.warn('City already exists::: ');
-      return;
-    }
-
-    this.props.forecastStore.appendNewCityToTheLocations(cityObjectToAppend);
-    ToastAndroid.show(
-      `${name} successfully added to the list!`,
-      ToastAndroid.SHORT,
-    );
-  };
-
-  _returnListItemName = item => {
-    if (item.locale_names instanceof Array) {
-      return item.locale_names[0] || item.locale_names.default[0];
-    } else if (item.city !== undefined && item.city.length > 0) {
-      return item.city.default;
-    } else if (item.administrative !== undefined) {
-      return item.administrative[0];
-    } else if (typeof item.country === 'string') {
-      return item.country || item.country.default;
+    if (
+      containsObject(forecastStore.locations, 'id', cityObjectToAppend) !== -1
+    ) {
+      ToastAndroid.show(
+        `${name} already exists in your locations!`,
+        ToastAndroid.SHORT,
+      );
+    } else {
+      this.props.forecastStore.appendNewCityToTheLocations(cityObjectToAppend);
+      ToastAndroid.show(
+        `${name} successfully added to the list!`,
+        ToastAndroid.SHORT,
+      );
     }
   };
 
@@ -150,9 +141,11 @@ class CityAddScreen extends Component {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{marginRight: 2}}
               renderItem={({item}) => {
-                const itemName = this._returnListItemName(item);
+                const itemName =
+                  item.locale_names instanceof Array
+                    ? item.locale_names[0]
+                    : item.locale_names.default[0];
                 if (!itemName) return;
-                console.warn('passing to press', itemName);
                 return (
                   <Box
                     py={2}
@@ -165,7 +158,9 @@ class CityAddScreen extends Component {
                     <Touchable
                       onPress={() =>
                         this._handleAddingNewCity(
-                          itemName,
+                          item.locale_names instanceof Array
+                            ? item.locale_names[0]
+                            : item.locale_names.default[0],
                           item._geoloc.lat,
                           item._geoloc.lng,
                           item.objectID,
