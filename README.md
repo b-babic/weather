@@ -22,6 +22,7 @@
 - Besides shared state, I've made some **hooks and contexts** for themeing purposes;
 - Ive added **progressive image** loader on the home page;
 - Splash screen should be added also;
+- On adding new city screen, I've been testing algolia places api. There is some validation, but the api is returning many things such ass cities, countries, streets, villages.
 
 ### Installation
 
