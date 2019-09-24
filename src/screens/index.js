@@ -1,5 +1,5 @@
 import React from 'react';
-import {Scene, Router} from 'react-native-router-flux';
+import {Scene, Router, Actions} from 'react-native-router-flux';
 // Screens
 import Home from './home';
 import Cities from './city';
@@ -8,7 +8,9 @@ import Settings from './settings';
 // Store
 import {observer, inject} from 'mobx-react';
 // Components
-import {TabIcon} from 'components';
+import {TabIcon, BottomNavigation} from 'components';
+// Primitives
+import {Box, Text, Touchable} from 'primitives';
 // ThemeProvider
 import theme from 'theme/theme';
 import {ThemeProvider} from 'theme/context';
@@ -25,7 +27,11 @@ class Screens extends React.Component {
           <Router>
             <Scene key="root" hideNavBar>
               {/* Tab Container */}
-              <Scene key="tabBar" tabBarPosition="bottom" tabs={true}>
+              <Scene
+                key="tabBar"
+                tabBarPosition="bottom"
+                tabs={true}
+                tabBarComponent={BottomNavigation}>
                 <Scene
                   key="home"
                   component={Home}
