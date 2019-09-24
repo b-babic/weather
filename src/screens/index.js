@@ -1,5 +1,5 @@
 import React from 'react';
-import {Scene, Router} from 'react-native-router-flux';
+import {Scene, Router, Actions} from 'react-native-router-flux';
 // Screens
 import Home from './home';
 import Cities from './city';
@@ -8,7 +8,9 @@ import Settings from './settings';
 // Store
 import {observer, inject} from 'mobx-react';
 // Components
-import {TabIcon} from 'components';
+import {TabIcon, BottomNavigation} from 'components';
+// Primitives
+import {Box, Text, Touchable} from 'primitives';
 // ThemeProvider
 import theme from 'theme/theme';
 import {ThemeProvider} from 'theme/context';
@@ -25,26 +27,39 @@ class Screens extends React.Component {
           <Router>
             <Scene key="root" hideNavBar>
               {/* Tab Container */}
-              <Scene key="tabBar" tabBarPosition="bottom" tabs={true}>
+              <Scene
+                key="tabBar"
+                tabBarPosition="bottom"
+                tabs={true}
+                tabBarComponent={BottomNavigation}>
                 <Scene
                   key="home"
                   component={Home}
                   title="Home"
-                  icon={() => <TabIcon icon="weather-hail" />}
+                  activeTintColor={themeValue.colors.activeIcon}
+                  icon={({focused}) => (
+                    <TabIcon icon="weather-hail" focused={focused} />
+                  )}
                   hideNavBar={true}
                 />
                 <Scene
                   key="cities"
                   component={Cities}
                   title="Forecast"
-                  icon={() => <TabIcon icon="playlist-plus" />}
+                  activeTintColor={themeValue.colors.activeIcon}
+                  icon={({focused}) => (
+                    <TabIcon icon="playlist-plus" focused={focused} />
+                  )}
                   hideNavBar={true}
                 />
                 <Scene
                   key="addCity"
                   component={AddCity}
                   title="Add city"
-                  icon={() => <TabIcon icon="map-marker-plus" />}
+                  activeTintColor={themeValue.colors.activeIcon}
+                  icon={({focused, title}) => (
+                    <TabIcon icon="map-marker-plus" focused={focused} />
+                  )}
                   showLabel={false}
                   hideNavBar={true}
                 />
@@ -52,7 +67,13 @@ class Screens extends React.Component {
                   key="settings"
                   component={Settings}
                   title="Settings"
-                  icon={() => <TabIcon icon="cellphone-settings-variant" />}
+                  activeTintColor={themeValue.colors.activeIcon}
+                  icon={({focused}) => (
+                    <TabIcon
+                      icon="cellphone-settings-variant"
+                      focused={focused}
+                    />
+                  )}
                   hideNavBar={true}
                 />
               </Scene>

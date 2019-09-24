@@ -126,7 +126,7 @@ class CityAddScreen extends Component {
                     mb={4}
                     border={0}
                     borderRadius={0}
-                    bg={theme.colors.white}>
+                    bg={theme.colors.bg}>
                     <Touchable
                       onPress={() =>
                         this._handleAddingNewCity(
@@ -151,12 +151,12 @@ class CityAddScreen extends Component {
                           justifyContent="space-between"
                           alignItems="center">
                           <Box>
-                            <Text color={theme.colors.text}>
+                            <Text color={theme.colors.title} fontSize={2}>
                               {item.locale_names instanceof Array
                                 ? item.locale_names[0]
                                 : item.locale_names.default[0]}
                             </Text>
-                            <Text color={theme.colors.inactiveText}>
+                            <Text color={theme.colors.subtitle} fontSize={1}>
                               {'  -  ' +
                                 (item.city !== undefined
                                   ? item.city[0] + ', '

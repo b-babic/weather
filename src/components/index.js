@@ -6,3 +6,4 @@ export {default as PageHeader} from './header';
 export {default as ForecastData} from './forecast-data';
 export {default as TabIcon} from './tab-icon';
 export {default as ProgressiveImage} from './progressive-image';
+export {default as BottomNavigation} from './bottom-navigation';
