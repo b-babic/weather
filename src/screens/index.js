@@ -30,7 +30,7 @@ class Screens extends React.Component {
                   key="home"
                   component={Home}
                   title="Home"
-                  icon={() => <TabIcon icon="weather-partly-cloudy" />}
+                  icon={() => <TabIcon icon="weather-hail" />}
                   hideNavBar={true}
                 />
                 <Scene

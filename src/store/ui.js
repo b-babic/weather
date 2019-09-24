@@ -25,6 +25,10 @@ export default class UiStore {
     this.error = msg;
   }
 
+  @action clearErrors() {
+    this.error = '';
+  }
+
   @computed get haveErrors() {
     return this.error ? this.error.length > 0 : false;
   }

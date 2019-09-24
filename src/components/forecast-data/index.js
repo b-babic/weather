@@ -21,8 +21,11 @@ function ForecastData({
 }) {
   const theme = useTheme();
   // Pretty much whenever name is not present, other parts arent too;
-  const noData = !name || name.length === 0;
-  if (noData) {
+  // const noData = !name || name.length === 0;
+  //const noData = !name || name.length === 0;
+  const noData = false;
+
+  if (isLoading) {
     return (
       <Box
         bg={theme.colors.bg}
@@ -36,6 +39,39 @@ function ForecastData({
       </Box>
     );
   }
+
+  if (noData) {
+    return (
+      <Box
+        bg={theme.colors.bg}
+        flex={1}
+        alignItems="center"
+        justifyContent="center"
+        style={{borderTopLeftRadius: 20, borderTopRightRadius: 20}}
+        px={4}
+        py={4}>
+        <Box
+          flex={1}
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center">
+          <MaterialCommunityIcon
+            name="emoticon-sad-outline"
+            size={48}
+            color={theme.colors.activeIcon}
+          />
+          <Text color={theme.colors.title} fontSize={4}>
+            Oops.
+          </Text>
+          <Text color={theme.colors.title} fontSize={3}>
+            {noData &&
+              'There seems to be an error while getting the data for your location. Are you sure gps setting are ok?'}
+          </Text>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <Box
       bg={theme.colors.bg}

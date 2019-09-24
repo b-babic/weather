@@ -1,4 +1,4 @@
-import {observable, action, computed} from 'mobx';
+import {observable, action, computed, runInAction} from 'mobx';
 // Storage persistance
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
@@ -84,6 +84,7 @@ export default class ForecastStore {
       await Geolocation.getCurrentPosition(
         position => {
           this.setInitialLocationAndPersist(position.coords);
+          return {status: 'ok'};
         },
         error => (this.error = error),
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
@@ -96,8 +97,8 @@ export default class ForecastStore {
   setInitialLocationAndPersist(coords) {
     this.activeLocation = {
       name: 'My current location',
-      longitude: coords.longitude,
-      latitude: coords.latitude,
+      longitude: parseFloat(coords.longitude.toFixed(4)),
+      latitude: parseFloat(coords.latitude.toFixed(4)),
       id: uuid(),
       active: true,
     };
@@ -108,6 +109,7 @@ export default class ForecastStore {
     }
 
     this.setActiveLocationAndPersist();
+    this.fetchWeatherForCurrentActiveLocation();
   }
 
   setActiveLocationAndPersist() {

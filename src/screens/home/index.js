@@ -31,6 +31,7 @@ class HomeScreen extends Component {
 
   async componentDidMount() {
     const value = await AsyncStorage.getItem('@WeatherApp:activeLocation');
+    this.props.uiStore.clearErrors();
 
     if (value) {
       const unStringifyValue = JSON.parse(value);
@@ -39,28 +40,32 @@ class HomeScreen extends Component {
       if (activeLocation) {
         this._fetchForecastData();
       } else {
+        this.props.uiStore.setError(
+          'No active location choosen. Please go pick a city.',
+        );
         console.warn('No active location choosen. Please go pick a city.');
       }
     } else {
       console.warn('setting current location');
+
       const currentActive = await this.props.forecastStore.setCurrentLocationToActive();
-      if (currentActive) {
-        console.warn('current active:: ', currentActive);
-        this.props.forecastSTore.addCurrentLocationToList();
-        this._fetchForecastData();
-      } else {
-        console.warn('SOME ERROR::: ');
+      if (!currentActive) {
+        ToastAndroid.show('Error getting forecast data.', ToastAndroid.SHORT);
+        this.props.uiStore.setError(
+          "It seems like we're having trouble to read your location.",
+        );
       }
     }
+    this.props.uiStore.setLoadingFalse();
   }
 
   render() {
     const {
       activeLocation: {name, longitude, latitude},
       forecast: {temperature, weatherCondition, humidity, tempMin, tempMax},
-      error,
     } = this.props.forecastStore;
     const {isLoading} = this.props.uiStore;
+    console.warn('error:::', this.props.uiStore.error);
     return (
       <Box flex={1}>
         <Box style={{height: height / 3, width: width}}>
@@ -78,7 +83,6 @@ class HomeScreen extends Component {
         </Box>
         <ForecastData
           isLoading={isLoading}
-          error={error}
           name={name}
           longitude={longitude}
           latitude={latitude}
