@@ -64,15 +64,22 @@ class ForecastScreen extends Component {
                       flex={4}
                       justifyContent="space-between"
                       alignItems="center"
+                      mr={2}
                       flexDirection="row">
                       <Box>
-                        <Text>{item.name}</Text>
+                        <Text color={theme.colors.title} fontSize={2}>
+                          {item.name}
+                        </Text>
                       </Box>
                       <Box alignItems="center" flex-direction="row">
                         <Box mr={2}>
-                          <Text>{item.latitude}</Text>
+                          <Text color={theme.colors.subtitle} fontSize={1}>
+                            {item.latitude}
+                          </Text>
                         </Box>
-                        <Text>{item.longitude}</Text>
+                        <Text color={theme.colors.subtitle} fontSize={1}>
+                          {item.longitude}
+                        </Text>
                       </Box>
                     </Box>
                     <Box

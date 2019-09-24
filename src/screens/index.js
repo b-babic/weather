@@ -30,21 +30,30 @@ class Screens extends React.Component {
                   key="home"
                   component={Home}
                   title="Home"
-                  icon={() => <TabIcon icon="weather-hail" />}
+                  activeTintColor={themeValue.colors.activeIcon}
+                  icon={({focused}) => (
+                    <TabIcon icon="weather-hail" focused={focused} />
+                  )}
                   hideNavBar={true}
                 />
                 <Scene
                   key="cities"
                   component={Cities}
                   title="Forecast"
-                  icon={() => <TabIcon icon="playlist-plus" />}
+                  activeTintColor={themeValue.colors.activeIcon}
+                  icon={({focused}) => (
+                    <TabIcon icon="playlist-plus" focused={focused} />
+                  )}
                   hideNavBar={true}
                 />
                 <Scene
                   key="addCity"
                   component={AddCity}
                   title="Add city"
-                  icon={() => <TabIcon icon="map-marker-plus" />}
+                  activeTintColor={themeValue.colors.activeIcon}
+                  icon={({focused, title}) => (
+                    <TabIcon icon="map-marker-plus" focused={focused} />
+                  )}
                   showLabel={false}
                   hideNavBar={true}
                 />
@@ -52,7 +61,13 @@ class Screens extends React.Component {
                   key="settings"
                   component={Settings}
                   title="Settings"
-                  icon={() => <TabIcon icon="cellphone-settings-variant" />}
+                  activeTintColor={themeValue.colors.activeIcon}
+                  icon={({focused}) => (
+                    <TabIcon
+                      icon="cellphone-settings-variant"
+                      focused={focused}
+                    />
+                  )}
                   hideNavBar={true}
                 />
               </Scene>
