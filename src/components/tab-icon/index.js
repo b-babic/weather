@@ -8,7 +8,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 
 class TabIcon extends Component {
   render() {
-    const isHomeScreen = icon === 'weather-hail';
+    const isHomeScreen = icon == 'weather-hail';
     const {icon, theme, focused} = this.props;
     const tintColor = focused
       ? theme.colors.activeText
