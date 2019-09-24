@@ -20,6 +20,7 @@
 - Regarding shared state, **mobx** is used in conjuction with **async storage** for **persistance** purposes;
 - **Navigation** is built using **router-flux** (never header of it before, I wanted to try);
 - Besides shared state, I've made some **hooks and contexts** for themeing purposes;
+- Small **design system** has been implemented for easier prototyping/design directly from the code (big fan of the tailwind css btw);
 - Ive added **progressive image** loader on the home page;
 - Splash screen should be added also;
 - On adding new city screen, I've been testing algolia places api. There is some validation, but the api is returning many things such ass cities, countries, streets, villages.
